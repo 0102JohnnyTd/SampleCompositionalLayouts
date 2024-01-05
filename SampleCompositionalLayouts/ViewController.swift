@@ -134,7 +134,7 @@ extension ViewController {
                 // Groupのサイズを設定
                 let groupSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(0.2),
-                    heightDimension: .fractionalHeight(0.2)
+                    heightDimension: .fractionalHeight(0.1)
                 )
                 // Groupのクラスインスタンスを生成
                 // TODO: iOS15.9以下のユーザーをフォローすると⇩のようにコード長くなってしまう。しかもgroupの生成処理以降は同じコードなので非常に冗長。でもどっちもdeprecatedの書き方でやるのはどうなんだろうという思いもあり..
@@ -178,7 +178,7 @@ extension ViewController {
                 // Itemのサイズを設定
                 let itemSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .fractionalWidth(1.0)
+                    heightDimension: .fractionalWidth(0.2)
                 )
                 // Itemのインスタンスを生成
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
