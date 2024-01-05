@@ -34,6 +34,9 @@ final class ViewController: UIViewController {
         }
     }
 
+    ///  CollectionViewに表示するデータを管理
+    private var dataSource: UICollectionViewDiffableDataSource<Section, Item>!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
