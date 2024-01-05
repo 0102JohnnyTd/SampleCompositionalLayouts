@@ -15,7 +15,7 @@ final class ViewController: UIViewController {
 
     /// DiffableDataSourceに追加するItemを管理
     private enum Item: Hashable {
-        case todo(String)
+        case menu(String)
     }
 
     // DiffableDataSourceに追加するSectionを管理
@@ -166,5 +166,23 @@ extension ViewController {
             }
         }
         return layout
+    }
+}
+
+extension ViewController {
+//    /// 画面起動時にDataSourceにデータを登録
+    private func applyInitialSnapshots(menuList: [String]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
+        snapshot.appendSections(Section.allCases)
+        dataSource.apply(snapshot)
+        let menuListItems = menuList.map { Item.menu($0) }
+
+        var circleMenuListSnapshot = NSDiffableDataSourceSectionSnapshot<Item>()
+        circleMenuListSnapshot.append(menuListItems)
+        dataSource.apply(circleMenuListSnapshot, to: .circleMenuList, animatingDifferences: true)
+
+        var rectangleMenuListSnapshot = NSDiffableDataSourceSectionSnapshot<Item>()
+        rectangleMenuListSnapshot.append(menuListItems)
+        dataSource.apply(rectangleMenuListSnapshot, to: .rectangleMenuList, animatingDifferences: true)
     }
 }
