@@ -8,6 +8,7 @@
 import UIKit
 
 final class RectangleCell: UICollectionViewCell {
+    @IBOutlet private weak var menuLabel: UILabel!
     static let nib = UINib(nibName: String(describing: RectangleCell.self), bundle: nil)
     static let identifier = String(describing: RectangleCell.self)
 
@@ -21,5 +22,9 @@ final class RectangleCell: UICollectionViewCell {
     private func setUpBackgroundView() {
         backgroundView = UIView(frame: super.frame)
         backgroundView?.backgroundColor = .systemRed
+    }
+
+    func configure(menu: String) {
+        menuLabel.text = menu
     }
 }

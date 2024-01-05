@@ -8,6 +8,8 @@
 import UIKit
 
 final class CircleCell: UICollectionViewCell {
+    @IBOutlet private weak var menuLabel: UILabel!
+
     static let nib = UINib(nibName: String(describing: CircleCell.self), bundle: nil)
     static let identifier = String(describing: CircleCell.self)
 
@@ -21,5 +23,9 @@ final class CircleCell: UICollectionViewCell {
     private func setUpBackgroundView() {
         backgroundView = UIView(frame: super.frame)
         backgroundView?.backgroundColor = .systemCyan
+    }
+    /// 自身のオブジェクトに値を代入する
+    func configure(menu: String) {
+        menuLabel.text = menu
     }
 }
