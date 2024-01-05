@@ -66,17 +66,25 @@
 			children = (
 				1C9CBA5A2B47DF3B00CF6419 /* AppDelegate.swift */,
 				1C9CBA5C2B47DF3B00CF6419 /* SceneDelegate.swift */,
+				1C9CBA762B47E47600CF6419 /* Cells */,
 				1C9CBA5E2B47DF3B00CF6419 /* ViewController.swift */,
 				1C9CBA602B47DF3B00CF6419 /* Main.storyboard */,
-				1C9CBA722B47E3F100CF6419 /* RectangleCell.swift */,
-				1C9CBA742B47E40B00CF6419 /* RectangleCell.xib */,
-				1C9CBA702B47E2D600CF6419 /* CircleCell.swift */,
-				1C9CBA6E2B47E24F00CF6419 /* CircleCell.xib */,
 				1C9CBA632B47DF3D00CF6419 /* Assets.xcassets */,
 				1C9CBA652B47DF3D00CF6419 /* LaunchScreen.storyboard */,
 				1C9CBA682B47DF3D00CF6419 /* Info.plist */,
 			);
 			path = SampleCompositionalLayouts;
+			sourceTree = "<group>";
+		};
+		1C9CBA762B47E47600CF6419 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				1C9CBA722B47E3F100CF6419 /* RectangleCell.swift */,
+				1C9CBA742B47E40B00CF6419 /* RectangleCell.xib */,
+				1C9CBA702B47E2D600CF6419 /* CircleCell.swift */,
+				1C9CBA6E2B47E24F00CF6419 /* CircleCell.xib */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
