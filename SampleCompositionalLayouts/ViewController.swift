@@ -10,8 +10,11 @@ import UIKit
 final class ViewController: UIViewController {
     @IBOutlet private weak var collectionView: UICollectionView!
 
-    /// Cellに表示させるドメインデータを要素とした配列
+    /// CircleCellに表示させるドメインデータを要素とした配列
+    private let gorillaList = ["1ごりら","2ごりら","3ごりら","4ごりら","5ごりら","6ごりら",]
+    /// RecangleCellに表示させるドメインデータを要素とした配列
     private let menuList = ["メニュー1","メニュー2","メニュー3","メニュー4","メニュー5","メニュー6",]
+
 
     /// DiffableDataSourceに追加するItemを管理
     private enum Item: Hashable {
@@ -43,8 +46,13 @@ final class ViewController: UIViewController {
         setUpCollectionView()
     }
 
-    private func setUpCollectionView() {
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         configureHierarchy()
+    }
+
+    private func setUpCollectionView() {
+//        configureHierarchy()
         configureDataSource()
         applyInitialSnapshots(menuList: menuList)
     }
@@ -61,6 +69,7 @@ extension ViewController {
         let circleCellRegistration = UICollectionView.CellRegistration<CircleCell, Item>(cellNib: CircleCell.nib) { cell, _, item in
             switch item {
             case .menu(let menu):
+//                cell.layer.cornerRadius = cell.frame.width * 0.5
                 cell.configure(menu: menu)
             }
         }
@@ -101,6 +110,8 @@ extension ViewController {
             // セクションの列数を定義
             let columnCount = sectionKind.columnCount
 
+            let section: NSCollectionLayoutSection
+
             // セクションごとにレイアウトを条件分岐
             switch sectionKind {
             case .circleMenuList:
@@ -108,10 +119,17 @@ extension ViewController {
                 // Itemのサイズを設定
                 let itemSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .fractionalHeight(1.2)
+                    heightDimension: .fractionalHeight(1.0)
                 )
                 // Itemのクラスインスタンスを生成
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                // Itemの上下左右間隔を指定
+                item.contentInsets = .init(
+                    top: 0,
+                    leading: 4,
+                    bottom: 4,
+                    trailing: 4
+                )
                 // MARK: - Groupを作成
                 // Groupのサイズを設定
                 let groupSize = NSCollectionLayoutSize(
@@ -129,7 +147,7 @@ extension ViewController {
                     )
                     // MARK: - Sectionを作成
                     // sectionのインスタンスを生成
-                    let section = NSCollectionLayoutSection(group: group)
+                    section = NSCollectionLayoutSection(group: group)
                     // section間のスペースを設定
                     section.interGroupSpacing = 10
                     // スクロール方向を指定
@@ -146,7 +164,7 @@ extension ViewController {
                     )
                     // MARK: - Sectionを作成
                     // sectionのインスタンスを生成
-                    let section = NSCollectionLayoutSection(group: group)
+                    section = NSCollectionLayoutSection(group: group)
                     // section間のスペースを設定
                     section.interGroupSpacing = 10
                     // スクロール方向を指定
@@ -164,6 +182,13 @@ extension ViewController {
                 )
                 // Itemのインスタンスを生成
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                // Itemの上下左右間隔を指定
+                item.contentInsets = .init(
+                    top: 4,
+                    leading: 4,
+                    bottom: 4,
+                    trailing: 4
+                )
                 // MARK: - Groupを作成
                 let groupSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1.0),
@@ -223,10 +248,14 @@ extension ViewController {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         snapshot.appendSections(Section.allCases)
         dataSource.apply(snapshot)
+
+        let gorillaListItems = gorillaList.map{ Item.menu($0) }
         let menuListItems = menuList.map { Item.menu($0) }
 
+
+
         var circleMenuListSnapshot = NSDiffableDataSourceSectionSnapshot<Item>()
-        circleMenuListSnapshot.append(menuListItems)
+        circleMenuListSnapshot.append(gorillaListItems)
         dataSource.apply(circleMenuListSnapshot, to: .circleMenuList, animatingDifferences: true)
 
         var rectangleMenuListSnapshot = NSDiffableDataSourceSectionSnapshot<Item>()

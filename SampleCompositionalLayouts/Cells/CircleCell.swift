@@ -19,6 +19,12 @@ final class CircleCell: UICollectionViewCell {
         setUpBackgroundView()
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.layer.cornerRadius = self.frame.width * 0.5
+        self.layer.masksToBounds = true
+    }
+
     ///  BackgroundViewを生成する
     private func setUpBackgroundView() {
         backgroundView = UIView(frame: super.frame)

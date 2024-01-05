@@ -17,6 +17,12 @@ final class RectangleCell: UICollectionViewCell {
         super.awakeFromNib()
         setUpBackgroundView()
     }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.layer.cornerRadius = 8
+        self.layer.masksToBounds = true
+    }
 
     ///  BackgroundViewを生成する
     private func setUpBackgroundView() {
