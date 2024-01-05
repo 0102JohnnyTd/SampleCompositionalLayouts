@@ -40,6 +40,13 @@ final class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        setUpCollectionView()
+    }
+
+    private func setUpCollectionView() {
+        configureHierarchy()
+        configureDataSource()
+        applyInitialSnapshots(menuList: menuList)
     }
 }
 
@@ -162,7 +169,7 @@ extension ViewController {
                     widthDimension: .fractionalWidth(1.0),
                     heightDimension: .fractionalHeight(0.2)
                 )
-//                let group = NSCollectionLayoutGroup(layoutSize: groupSize)
+
                 if #available(iOS 16.0, *) {
                     // Groupのインスタンスを生成
                     let group = NSCollectionLayoutGroup.horizontal(
