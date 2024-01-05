@@ -44,6 +44,47 @@ final class ViewController: UIViewController {
 }
 
 extension ViewController {
+    private func configureHierarchy() {
+        collectionView.collectionViewLayout = createLayout()
+    }
+
+    /// データソースを構築
+    private func configureDataSource() {
+        // MARK: - Cellの登録
+        let circleCellRegistration = UICollectionView.CellRegistration<CircleCell, Item>(cellNib: CircleCell.nib) { cell, _, item in
+            switch item {
+            case .menu(let menu):
+                cell.configure(menu: menu)
+            }
+        }
+        let rectangleCellRegistration = UICollectionView.CellRegistration<RectangleCell, Item>(cellNib: RectangleCell.nib) { cell, _, item in
+            switch item {
+            case .menu(let menu):
+                cell.configure(menu: menu)
+            }
+        }
+        // MARK: - DataSourceの構築
+        dataSource = UICollectionViewDiffableDataSource<Section, Item>(collectionView: collectionView) { collectionView, indexPath, item -> UICollectionViewCell? in
+            guard let section = Section(rawValue: indexPath.section) else { fatalError("Unknown section") }
+            switch section {
+            case .circleMenuList:
+                return collectionView.dequeueConfiguredReusableCell(
+                    using: circleCellRegistration,
+                    for: indexPath,
+                    item: item
+                )
+            case .rectangleMenuList:
+                return collectionView.dequeueConfiguredReusableCell(
+                    using: rectangleCellRegistration,
+                    for: indexPath,
+                    item: item
+                )
+            }
+        }
+    }
+}
+
+extension ViewController {
     /// CollectionViewのレイアウトを構築する
     private func createLayout() -> UICollectionViewLayout {
         // UICollectionViewCompositionalLayoutクラスのインスタンスを作成
