@@ -36,6 +36,7 @@ final class ViewController: UIViewController {
             }
         }
     }
+    
 
     ///  CollectionViewに表示するデータを管理
     private var dataSource: UICollectionViewDiffableDataSource<Section, Item>!
@@ -104,7 +105,7 @@ extension ViewController {
     /// CollectionViewのレイアウトを構築する
     private func createLayout() -> UICollectionViewLayout {
         // UICollectionViewCompositionalLayoutクラスのインスタンスを作成
-        let layout = UICollectionViewCompositionalLayout{ (sectionIndex: Int, _: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+        let layout = UICollectionViewCompositionalLayout{ (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
             // indexに該当するセクションにアクセスする
             guard let sectionKind = Section(rawValue: sectionIndex) else { return nil }
             // セクションの列数を定義
@@ -195,47 +196,39 @@ extension ViewController {
                     heightDimension: .fractionalHeight(0.2)
                 )
 
-                if #available(iOS 16.0, *) {
-                    // Groupのインスタンスを生成
-                    let group = NSCollectionLayoutGroup.horizontal(
-                        layoutSize: groupSize, // groupのサイズを指定
-                        repeatingSubitem: item, // group内で表示させるItem
-                        count: sectionKind.columnCount // 列の数
-                    )
-                    // MARK: - Sectionを作成
-                    // Sectionのインスタンスを生成
-                    let section = NSCollectionLayoutSection(group: group)
-                    // section間のスペースを設定
-                    section.interGroupSpacing = 8
-                    // sectionの上下左右間隔を指定
-                    section.contentInsets = .init(
-                        top: 8,
-                        leading: 8,
-                        bottom: 8,
-                        trailing: 8
-                    )
-                    return section
-                } else {
-                    // Groupのインスタンスを生成
-                    let group = NSCollectionLayoutGroup.horizontal(
-                        layoutSize: groupSize,
-                        subitem: item,
-                        count: sectionKind.columnCount
-                    )
-                    // MARK: - Sectionを作成
-                    // Sectionのインスタンスを生成
-                    let section = NSCollectionLayoutSection(group: group)
-                    // section間のスペースを設定
-                    section.interGroupSpacing = 8
-                    // sectionの上下左右間隔を指定
-                    section.contentInsets = .init(
-                        top: 8,
-                        leading: 8,
-                        bottom: 8,
-                        trailing: 8
-                    )
-                    return section
+
+                func makeGroup() -> NSCollectionLayoutGroup {
+                    if #available(iOS 16.0, *) {
+                        // Groupのインスタンスを生成
+                        return NSCollectionLayoutGroup.horizontal(
+                            layoutSize: groupSize, // groupのサイズを指定
+                            repeatingSubitem: item, // group内で表示させるItem
+                            count: sectionKind.columnCount // 列の数
+                        )
+                    } else {
+                        // Groupのインスタンスを生成
+                        return NSCollectionLayoutGroup.horizontal(
+                            layoutSize: groupSize,
+                            subitem: item,
+                            count: sectionKind.columnCount
+                        )
+                    }
                 }
+
+                let group = makeGroup()
+                // MARK: - Sectionを作成
+                // Sectionのインスタンスを生成
+                let section = NSCollectionLayoutSection(group: group)
+                // section間のスペースを設定
+                section.interGroupSpacing = 8
+                // sectionの上下左右間隔を指定
+                section.contentInsets = .init(
+                    top: 8,
+                    leading: 8,
+                    bottom: 8,
+                    trailing: 8
+                )
+                return section
             }
         }
         return layout
@@ -243,7 +236,7 @@ extension ViewController {
 }
 
 extension ViewController {
-//    /// 画面起動時にDataSourceにデータを登録
+    /// 画面起動時にDataSourceにデータを登録
     private func applyInitialSnapshots(menuList: [String]) {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         snapshot.appendSections(Section.allCases)
