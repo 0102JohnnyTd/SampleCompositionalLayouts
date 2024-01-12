@@ -26,13 +26,32 @@ final class ViewController: UIViewController {
         case circleMenuList
         case rectangleMenuList
 
-        // Sectionごとの列数を返す
+        /// Sectionごとの列数を返す
         var columnCount: Int {
             switch self {
             case .circleMenuList:
                 return 1
             case .rectangleMenuList:
                 return 1
+            }
+        }
+
+        /// OSに応じたNSCollectionLayoutGroupを生成する
+        func makeGroup(groupSize: NSCollectionLayoutSize, item: NSCollectionLayoutItem) -> NSCollectionLayoutGroup {
+            if #available(iOS 16.0, *) {
+                // Groupのインスタンスを生成
+                return NSCollectionLayoutGroup.horizontal(
+                    layoutSize: groupSize, // groupのサイズを指定
+                    repeatingSubitem: item, // group内で表示させるItem
+                    count: columnCount // 列の数
+                )
+            } else {
+                // Groupのインスタンスを生成
+                return NSCollectionLayoutGroup.horizontal(
+                    layoutSize: groupSize,
+                    subitem: item,
+                    count: columnCount
+                )
             }
         }
     }
@@ -195,27 +214,7 @@ extension ViewController {
                     widthDimension: .fractionalWidth(1.0),
                     heightDimension: .fractionalHeight(0.2)
                 )
-
-
-                func makeGroup() -> NSCollectionLayoutGroup {
-                    if #available(iOS 16.0, *) {
-                        // Groupのインスタンスを生成
-                        return NSCollectionLayoutGroup.horizontal(
-                            layoutSize: groupSize, // groupのサイズを指定
-                            repeatingSubitem: item, // group内で表示させるItem
-                            count: sectionKind.columnCount // 列の数
-                        )
-                    } else {
-                        // Groupのインスタンスを生成
-                        return NSCollectionLayoutGroup.horizontal(
-                            layoutSize: groupSize,
-                            subitem: item,
-                            count: sectionKind.columnCount
-                        )
-                    }
-                }
-
-                let group = makeGroup()
+                let group = sectionKind.makeGroup(groupSize: groupSize, item: item)
                 // MARK: - Sectionを作成
                 // Sectionのインスタンスを生成
                 let section = NSCollectionLayoutSection(group: group)
