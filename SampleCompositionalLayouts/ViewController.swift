@@ -165,39 +165,9 @@ extension ViewController {
                 section.contentInsets = .init(top: 8, leading: 8, bottom: 8, trailing: 8)
                 return section
             case .rectangleMenuList:
-                // MARK: - Itemを作成
-                // Itemのサイズを設定
-                let itemSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .fractionalWidth(0.2)
-                )
-                // Itemのインスタンスを生成
-                let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                // Itemの上下左右間隔を指定
-                item.contentInsets = .init(
-                    top: 4,
-                    leading: 4,
-                    bottom: 4,
-                    trailing: 4
-                )
-                // MARK: - Groupを作成
-                let groupSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .fractionalHeight(0.2)
-                )
-                let group = sectionKind.makeGroup(groupSize: groupSize, item: item)
-                // MARK: - Sectionを作成
-                // Sectionのインスタンスを生成
-                let section = NSCollectionLayoutSection(group: group)
-                // section間のスペースを設定
-                section.interGroupSpacing = 8
-                // sectionの上下左右間隔を指定
-                section.contentInsets = .init(
-                    top: 8,
-                    leading: 8,
-                    bottom: 8,
-                    trailing: 8
-                )
+                let configuration = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+                let section = NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: layoutEnvironment)
+                section.interGroupSpacing = 24
                 return section
             }
         }
