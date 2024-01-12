@@ -127,11 +127,8 @@ extension ViewController {
         let layout = UICollectionViewCompositionalLayout{ (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
             // indexに該当するセクションにアクセスする
             guard let sectionKind = Section(rawValue: sectionIndex) else { return nil }
-            // セクションの列数を定義
-            let columnCount = sectionKind.columnCount
 
             let section: NSCollectionLayoutSection
-
             // セクションごとにレイアウトを条件分岐
             switch sectionKind {
             case .circleMenuList:
@@ -156,43 +153,17 @@ extension ViewController {
                     widthDimension: .fractionalWidth(0.2),
                     heightDimension: .fractionalHeight(0.1)
                 )
-                // Groupのクラスインスタンスを生成
-                // TODO: iOS15.9以下のユーザーをフォローすると⇩のようにコード長くなってしまう。しかもgroupの生成処理以降は同じコードなので非常に冗長。でもどっちもdeprecatedの書き方でやるのはどうなんだろうという思いもあり..
-                if #available(iOS 16.0, *) {
-                    // 横スクロールな
-                    let group = NSCollectionLayoutGroup.horizontal(
-                        layoutSize: groupSize, // groupのサイズ
-                        repeatingSubitem: item, // group内で表示させるItem
-                        count: columnCount // 列の数
-                    )
-                    // MARK: - Sectionを作成
-                    // sectionのインスタンスを生成
-                    section = NSCollectionLayoutSection(group: group)
-                    // section間のスペースを設定
-                    section.interGroupSpacing = 10
-                    // スクロール方向を指定
-                    section.orthogonalScrollingBehavior = .continuous
-                    // sectionの上下左右間隔を指定
-                    section.contentInsets = .init(top: 8, leading: 8, bottom: 8, trailing: 8)
-                    return section
-                } else {
-                    // iOS16未満ユーザー向けの実装
-                    let group = NSCollectionLayoutGroup.horizontal(
-                        layoutSize: groupSize,
-                        subitem: item,
-                        count: columnCount
-                    )
-                    // MARK: - Sectionを作成
-                    // sectionのインスタンスを生成
-                    section = NSCollectionLayoutSection(group: group)
-                    // section間のスペースを設定
-                    section.interGroupSpacing = 10
-                    // スクロール方向を指定
-                    section.orthogonalScrollingBehavior = .continuous
-                    // sectionの上下左右間隔を指定
-                    section.contentInsets = .init(top: 8, leading: 8, bottom: 8, trailing: 8)
-                    return section
-                }
+                let group = sectionKind.makeGroup(groupSize: groupSize, item: item)
+                // MARK: - Sectionを作成
+                // sectionのインスタンスを生成
+                section = NSCollectionLayoutSection(group: group)
+                // section間のスペースを設定
+                section.interGroupSpacing = 10
+                // スクロール方向を指定
+                section.orthogonalScrollingBehavior = .continuous
+                // sectionの上下左右間隔を指定
+                section.contentInsets = .init(top: 8, leading: 8, bottom: 8, trailing: 8)
+                return section
             case .rectangleMenuList:
                 // MARK: - Itemを作成
                 // Itemのサイズを設定
